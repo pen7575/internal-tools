@@ -1,2 +1,2 @@
 # internal-tools
-tools
+tools for budget managment
