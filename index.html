@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>一路拍影像有限公司 — 專案經費試算</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -285,7 +286,7 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
 <div id="tab-budgetctrl" style="display:none;">
   <div class="card" style="margin-bottom:1rem;">
     <div class="section-title">製作成本比例調整</div>
-    <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px;">導演與製片各固定 7.5%（合計 15%）。其餘項目可調整，建議合計維持 47%。</div>
+    <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px;">導演與製片各固定 7.5%（合計 15%）。其餘項目可調整，建議合計維持 40–45%。</div>
     <div class="range-row">
       <label>製片（固定 7.5%）→ <span id="pct-pm-amt" style="color:var(--text-secondary);"></span></label>
       <div class="range-inner">
@@ -303,21 +304,21 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
     <div class="range-row">
       <label>拍攝 <span id="pct-shoot-lbl">15</span>% → <span id="pct-shoot-amt" style="color:var(--text-secondary);"></span></label>
       <div class="range-inner">
-        <input type="range" id="pct-shoot" min="0" max="40" value="15" step="1" oninput="syncBudget()" />
+        <input type="range" id="pct-shoot" min="0" max="40" value="12" step="1" oninput="syncBudget()" />
         <span id="pct-shoot-out" style="font-size:13px;font-weight:500;min-width:36px;text-align:right;"></span>
       </div>
     </div>
     <div class="range-row">
       <label>後期 <span id="pct-post-lbl">10</span>% → <span id="pct-post-amt" style="color:var(--text-secondary);"></span></label>
       <div class="range-inner">
-        <input type="range" id="pct-post" min="0" max="30" value="10" step="1" oninput="syncBudget()" />
+        <input type="range" id="pct-post" min="0" max="30" value="9" step="1" oninput="syncBudget()" />
         <span id="pct-post-out" style="font-size:13px;font-weight:500;min-width:36px;text-align:right;"></span>
       </div>
     </div>
     <div class="range-row">
       <label>雜支 <span id="pct-misc-lbl">7</span>% → <span id="pct-misc-amt" style="color:var(--text-secondary);"></span></label>
       <div class="range-inner">
-        <input type="range" id="pct-misc" min="0" max="20" value="7" step="1" oninput="syncBudget()" />
+        <input type="range" id="pct-misc" min="0" max="20" value="6" step="1" oninput="syncBudget()" />
         <span id="pct-misc-out" style="font-size:13px;font-weight:500;min-width:36px;text-align:right;"></span>
       </div>
     </div>
@@ -358,8 +359,6 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
 </div>
 
 <script>
-const SUPABASE_URL = 'https://fhgyogptgfjoxxkqhlvp.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_MZU2Nq6PqUHGWDeHHzesvA_J64LO9ap';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let saveTimer = null;
 let isReady = false;
@@ -580,8 +579,8 @@ function syncBudget() {
   const prodTotal = Math.round((p.pm+p.dir+p.shoot+p.post+p.misc)*1000)/10;
   const opsTotal  = Math.round((p.admin+p.office)*1000)/10;
   const ptEl = document.getElementById('prod-total-check');
-  ptEl.textContent = prodTotal+'%'+(prodTotal===47?' ✓':'（預設 47%）');
-  ptEl.style.color = prodTotal===47?'var(--text-success)':'var(--text-warning)';
+  ptEl.textContent = prodTotal+'%'+(prodTotal>=40&&prodTotal<=45?' ✓':'（建議 40–45%）');
+  ptEl.style.color = prodTotal>=40&&prodTotal<=45?'var(--text-success)':'var(--text-warning)';
   const otEl = document.getElementById('ops-total-check');
   otEl.textContent = opsTotal+'%'+(opsTotal===15?' ✓':'（預設 15%）');
   otEl.style.color = opsTotal===15?'var(--text-success)':'var(--text-warning)';
@@ -589,9 +588,9 @@ function syncBudget() {
 }
 
 function resetProd() {
-  document.getElementById('pct-shoot').value=15;
-  document.getElementById('pct-post').value=10;
-  document.getElementById('pct-misc').value=7;
+  document.getElementById('pct-shoot').value=12;
+  document.getElementById('pct-post').value=9;
+  document.getElementById('pct-misc').value=6;
   syncBudget();
 }
 function resetOps() {
@@ -775,7 +774,7 @@ function recalc() {
   const ot=Math.round(opsTotal*1000)/10;
   const ptEl=document.getElementById('prod-total-check');
   const otEl=document.getElementById('ops-total-check');
-  if(ptEl){ ptEl.textContent=pt+'%'+(pt===47?' ✓':'（預設 47%）'); ptEl.style.color=pt===47?'var(--text-success)':'var(--text-warning)'; }
+  if(ptEl){ ptEl.textContent=pt+'%'+(pt>=40&&pt<=45?' ✓':'（建議 40–45%）'); ptEl.style.color=pt>=40&&pt<=45?'var(--text-success)':'var(--text-warning)'; }
   if(otEl){ otEl.textContent=ot+'%'+(ot===15?' ✓':'（預設 15%）'); otEl.style.color=ot===15?'var(--text-success)':'var(--text-warning)'; }
 
   scheduleSave();
