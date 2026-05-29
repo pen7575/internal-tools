@@ -25,11 +25,9 @@
   --border: rgba(0,0,0,0.12);
   --border-md: rgba(0,0,0,0.22);
   --border-strong: rgba(0,0,0,0.35);
-  --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --accent: #185FA5;
-  --accent-light: #e6f1fb;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -52,7 +50,6 @@
     --border-md: rgba(255,255,255,0.2);
     --border-strong: rgba(255,255,255,0.3);
     --accent: #378ADD;
-    --accent-light: #0c2a44;
   }
 }
 
@@ -66,26 +63,11 @@ body {
   padding: 2rem 1rem;
 }
 
-.container {
-  max-width: 780px;
-  margin: 0 auto;
-}
+.container { max-width: 780px; margin: 0 auto; }
 
-header {
-  margin-bottom: 2rem;
-}
-
-header h1 {
-  font-size: 22px;
-  font-weight: 500;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-
-header p {
-  font-size: 13px;
-  color: var(--text-tertiary);
-}
+header { margin-bottom: 2rem; }
+header h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+header p { font-size: 13px; color: var(--text-tertiary); }
 
 .card {
   background: var(--bg);
@@ -104,20 +86,6 @@ header p {
   margin-bottom: 12px;
 }
 
-.input-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 1.25rem;
-}
-
-.input-row label {
-  font-size: 14px;
-  color: var(--text-secondary);
-  white-space: nowrap;
-}
-
 input[type="number"], input[type="text"], select {
   background: var(--bg);
   color: var(--text);
@@ -126,10 +94,8 @@ input[type="number"], input[type="text"], select {
   padding: 7px 10px;
   font-size: 14px;
   outline: none;
-  transition: border-color 0.15s;
   font-family: inherit;
 }
-
 input[type="number"]:focus, input[type="text"]:focus, select:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(55,138,221,0.12);
@@ -144,11 +110,9 @@ input[type="range"] {
   outline: none;
   flex: 1;
 }
-
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 16px; height: 16px;
   border-radius: 50%;
   background: var(--accent);
   cursor: pointer;
@@ -166,7 +130,6 @@ button {
   font-family: inherit;
   transition: background 0.12s;
 }
-
 button:hover { background: var(--bg-secondary); }
 button:active { transform: scale(0.98); }
 
@@ -176,145 +139,46 @@ button:active { transform: scale(0.98); }
   gap: 10px;
   margin-bottom: 1.25rem;
 }
+.metric { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 0.875rem 1rem; }
+.metric .lbl { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+.metric .val { font-size: 19px; font-weight: 500; }
 
-.metric {
-  background: var(--bg-secondary);
-  border-radius: var(--radius-md);
-  padding: 0.875rem 1rem;
-}
+.tabs { display: flex; gap: 6px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.tab-btn { background: transparent; border: 0.5px solid var(--border-md); border-radius: var(--radius-md); padding: 6px 16px; font-size: 13px; color: var(--text-secondary); }
+.tab-btn.active { background: var(--bg-secondary); color: var(--text); font-weight: 500; border-color: var(--border-strong); }
 
-.metric .lbl {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-bottom: 4px;
-}
-
-.metric .val {
-  font-size: 19px;
-  font-weight: 500;
-}
-
-.tabs {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 1.25rem;
-  flex-wrap: wrap;
-}
-
-.tab-btn {
-  background: transparent;
-  border: 0.5px solid var(--border-md);
-  border-radius: var(--radius-md);
-  padding: 6px 16px;
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-
-.tab-btn.active {
-  background: var(--bg-secondary);
-  color: var(--text);
-  font-weight: 500;
-  border-color: var(--border-strong);
-}
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 0;
-  border-bottom: 0.5px solid var(--border);
-  font-size: 13px;
-  gap: 8px;
-}
-
+.row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; gap: 8px; }
 .row:last-child { border-bottom: none; }
 .row .lbl { color: var(--text-secondary); }
 .row .val { font-weight: 500; }
 
-.phase-grid {
-  display: grid;
-  grid-template-columns: 1fr 72px 1fr 28px;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 6px;
-}
-
-.phase-bar-wrap {
-  height: 6px;
-  background: var(--bg-secondary);
-  border-radius: 3px;
-  overflow: hidden;
-  margin: 6px 0 3px;
-}
-
-.phase-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 0.2s;
-}
+.phase-grid { display: grid; grid-template-columns: 1fr 72px 1fr 28px; gap: 8px; align-items: center; margin-bottom: 6px; }
+.phase-bar-wrap { height: 6px; background: var(--bg-secondary); border-radius: 3px; overflow: hidden; margin: 6px 0 3px; }
+.phase-bar-fill { height: 100%; border-radius: 3px; transition: width 0.2s; }
 
 .warn { color: var(--text-danger); font-size: 12px; margin-top: 4px; }
 .ok { color: var(--text-success); font-size: 12px; margin-top: 4px; }
 
-.range-row {
-  margin-bottom: 12px;
-}
+.range-row { margin-bottom: 12px; }
+.range-row label { font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 4px; }
+.range-inner { display: flex; align-items: center; gap: 8px; }
+.range-inner span { font-size: 13px; font-weight: 500; min-width: 36px; text-align: right; }
+.hint { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
 
-.range-row label {
-  font-size: 12px;
-  color: var(--text-secondary);
-  display: block;
-  margin-bottom: 4px;
-}
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
-.range-inner {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.share-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-top: 10px; }
+.share-card { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px 14px; }
+.share-card .name { font-size: 12px; color: var(--text-secondary); margin-bottom: 2px; }
+.share-card .pct { font-size: 11px; color: var(--text-tertiary); margin-bottom: 6px; }
+.share-card .amt { font-size: 17px; font-weight: 500; }
+.share-card .salary { font-size: 11px; color: var(--text-secondary); margin-top: 3px; }
 
-.range-inner span {
-  font-size: 13px;
-  font-weight: 500;
-  min-width: 36px;
-  text-align: right;
-}
-
-.hint {
-  font-size: 11px;
-  color: var(--text-tertiary);
-  margin-top: 2px;
-}
-
-.two-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
+footer { font-size: 11px; color: var(--text-tertiary); border-top: 0.5px solid var(--border); padding-top: 0.75rem; margin-top: 1rem; }
 
 @media (max-width: 540px) {
   .two-col { grid-template-columns: 1fr; }
   .phase-grid { grid-template-columns: 1fr 60px 1fr 24px; }
-}
-
-.result-total {
-  font-size: 15px;
-  color: var(--text-success);
-}
-
-.sub-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 8px;
-  margin-top: 8px;
-}
-
-footer {
-  font-size: 11px;
-  color: var(--text-tertiary);
-  border-top: 0.5px solid var(--border);
-  padding-top: 0.75rem;
-  margin-top: 1rem;
 }
 </style>
 </head>
@@ -323,21 +187,20 @@ footer {
 
 <header>
   <h1>一路拍影像有限公司經費試算</h1>
-  <p>商案 / 標案分期給付 · 製作成本明細 · 分潤試算</p>
+  <p>商案 / 標案分期給付 · 製作成本明細 · 股份分潤</p>
 </header>
 
 <div class="card">
-  <div class="input-row">
-    <label>案值（含稅前）</label>
-    <input type="number" id="projectValue" value="1000000" min="0" step="10000" style="width:180px; font-size:16px; font-weight:500;" oninput="recalc()" />
+  <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:1.25rem;">
+    <label style="font-size:14px; color:var(--text-secondary); white-space:nowrap;">案值（含稅前）</label>
+    <input type="number" id="projectValue" value="523810" min="0" step="1000" style="width:180px; font-size:16px; font-weight:500;" oninput="recalc()" />
     <span style="font-size:13px; color:var(--text-tertiary)">NTD</span>
     <span style="font-size:13px; color:var(--text-secondary)">含稅報價</span>
     <span id="withTax" style="font-size:15px; font-weight:500;"></span>
   </div>
-
   <div class="metrics-grid">
-    <div class="metric"><div class="lbl">製作成本 47%</div><div class="val" id="m-prod"></div></div>
-    <div class="metric"><div class="lbl">營運金 15%</div><div class="val" id="m-ops"></div></div>
+    <div class="metric"><div class="lbl" id="lbl-prod">製作成本</div><div class="val" id="m-prod"></div></div>
+    <div class="metric"><div class="lbl" id="lbl-ops">營運金</div><div class="val" id="m-ops"></div></div>
     <div class="metric"><div class="lbl">專案利潤 30%</div><div class="val" id="m-profit"></div></div>
     <div class="metric"><div class="lbl">預備金 8%</div><div class="val" id="m-reserve"></div></div>
   </div>
@@ -348,8 +211,10 @@ footer {
   <button class="tab-btn" onclick="switchTab('tender',this)">標案分期</button>
   <button class="tab-btn" onclick="switchTab('payout',this)">分潤試算</button>
   <button class="tab-btn" onclick="switchTab('production',this)">製作明細</button>
+  <button class="tab-btn" onclick="switchTab('budgetctrl',this)">比例調整</button>
 </div>
 
+<!-- 商案分期 -->
 <div id="tab-commercial">
   <div class="card">
     <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:1rem;">
@@ -374,6 +239,7 @@ footer {
   </div>
 </div>
 
+<!-- 標案分期 -->
 <div id="tab-tender" style="display:none;">
   <div class="card">
     <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:1rem;">
@@ -398,82 +264,134 @@ footer {
   </div>
 </div>
 
+<!-- 分潤試算 -->
 <div id="tab-payout" style="display:none;">
-  <div class="two-col" style="margin-bottom:1rem;">
-    <div class="card">
-      <div class="section-title">分潤參數</div>
-      <div class="range-row">
-        <label>預備金使用率</label>
-        <div class="range-inner">
-          <input type="range" id="reserveUsed" min="0" max="100" value="0" step="1" oninput="recalc()" />
-          <span id="reserveUsedPct"></span>
-        </div>
-      </div>
-      <div class="range-row">
-        <label>利潤公司保留比例</label>
-        <div class="range-inner">
-          <input type="range" id="companyKeep" min="0" max="100" value="45" step="5" oninput="recalc()" />
-          <span id="companyKeepPct"></span>
-        </div>
-      </div>
-      <div class="range-row">
-        <label>尾款釋出比例（製片 / 導演）</label>
-        <div class="range-inner">
-          <input type="range" id="tailPct" min="0" max="40" value="20" step="5" oninput="recalc()" />
-          <span id="tailPctOut"></span>
-        </div>
-        <div class="hint">從製片＋導演薪酬中預留，專案結算後發放</div>
-      </div>
+  <div class="card" style="margin-bottom:1rem;">
+    <div class="section-title">預備金使用率</div>
+    <div class="hint" style="margin-bottom:10px;">預備金 8% 全數未動用時，依股份比例分配給四位成員。</div>
+    <div class="range-inner" style="gap:12px;">
+      <input type="range" id="reserveUsed" min="0" max="100" value="0" step="1" oninput="recalc()" style="flex:1;" />
+      <span id="reserveUsedPct" style="font-size:14px; font-weight:500; min-width:44px; text-align:right;"></span>
+      <span style="font-size:12px; color:var(--text-tertiary);">已使用</span>
     </div>
-    <div class="card">
-      <div class="section-title">分潤結果</div>
-      <div class="row"><span class="lbl">預備金剩餘分潤</span><span class="val" style="color:var(--text-success)" id="s-reserve"></span></div>
-      <div class="row"><span class="lbl">利潤團隊分潤</span><span class="val" style="color:var(--text-success)" id="s-team"></span></div>
-      <div class="row"><span class="lbl">利潤公司保留</span><span class="val" id="s-company"></span></div>
-      <div class="row"><span class="lbl">製片尾款</span><span class="val" style="color:var(--text-warning)" id="s-pm-tail"></span></div>
-      <div class="row"><span class="lbl">導演尾款</span><span class="val" style="color:var(--text-warning)" id="s-dir-tail"></span></div>
-      <div class="row" style="margin-top:4px; border-top:0.5px solid var(--border-md); padding-top:8px;">
-        <span style="font-weight:500;">可分潤總額</span>
-        <span class="val result-total" id="s-total"></span>
-      </div>
+    <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-tertiary); margin-top:6px;">
+      <span>剩餘可分潤：<span id="reserve-left" style="font-weight:500; color:var(--text-success);"></span></span>
+      <span>預備金總額：<span id="reserve-total" style="font-weight:500;"></span></span>
     </div>
   </div>
+
   <div class="card">
-    <div class="section-title">加給情境模擬</div>
-    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-      <label style="font-size:13px; color:var(--text-secondary);">人數</label>
-      <input type="number" id="headcount" value="4" min="1" max="20" style="width:60px;" oninput="recalc()" />
-      <label style="font-size:13px; color:var(--text-secondary); margin-left:10px;">加權模式</label>
-      <select id="splitMode" onchange="recalc()" style="font-size:13px;">
-        <option value="equal">平均分配</option>
-        <option value="role">依職位（導演 1.5x · 製片 1.2x · 其他 1x）</option>
-      </select>
+    <div class="section-title">股份分潤明細</div>
+    <div class="hint" style="margin-bottom:12px;">30% 專案利潤為公司保留。分潤來源僅為預備金未動用部分，依出資比例分配。</div>
+    <div class="share-grid" id="share-grid"></div>
+    <div style="border-top:0.5px solid var(--border-md); margin-top:14px; padding-top:10px; display:flex; justify-content:space-between; font-size:13px;">
+      <span style="font-weight:500;">分潤總額</span>
+      <span id="s-total" style="font-weight:500; font-size:15px; color:var(--text-success);"></span>
     </div>
-    <div id="perPersonTable"></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">各成員單案總收入（薪酬 + 分潤）</div>
+    <div class="hint" style="margin-bottom:12px;">執行成員另有製作成本內薪酬；佳為共同創辦，僅領分潤。</div>
+    <div id="total-income-grid" class="share-grid"></div>
   </div>
 </div>
 
+<!-- 製作明細 -->
 <div id="tab-production" style="display:none;">
   <div class="card">
-    <div class="section-title">製作成本明細（47%）</div>
-    <div class="row"><span class="lbl">製片 7%</span><span class="val" id="d-pm"></span></div>
-    <div class="row"><span class="lbl">導演 8%</span><span class="val" id="d-dir"></span></div>
-    <div class="row"><span class="lbl">拍攝 15%</span><span class="val" id="d-shoot"></span></div>
-    <div class="row"><span class="lbl">後期 10%</span><span class="val" id="d-post"></span></div>
-    <div class="row"><span class="lbl">雜支（田野、拍攝交通）7%</span><span class="val" id="d-misc"></span></div>
-    <div class="row" style="margin-top:4px; border-top:0.5px solid var(--border-md); padding-top:8px;">
+    <div class="section-title" id="prod-detail-title">製作成本明細</div>
+    <div class="row"><span class="lbl">製片 <span id="dl-pm"></span>%</span><span class="val" id="d-pm"></span></div>
+    <div class="row"><span class="lbl">導演 <span id="dl-dir"></span>%</span><span class="val" id="d-dir"></span></div>
+    <div class="row"><span class="lbl">拍攝 <span id="dl-shoot"></span>%</span><span class="val" id="d-shoot"></span></div>
+    <div class="row"><span class="lbl">後期 <span id="dl-post"></span>%</span><span class="val" id="d-post"></span></div>
+    <div class="row"><span class="lbl">雜支 <span id="dl-misc"></span>%</span><span class="val" id="d-misc"></span></div>
+    <div class="row" style="border-top:0.5px solid var(--border-md); margin-top:4px; padding-top:8px;">
       <span style="font-weight:500;">製作成本合計</span><span class="val" id="d-total"></span>
     </div>
   </div>
   <div class="card">
-    <div class="section-title">營運金明細（15%）</div>
-    <div class="row"><span class="lbl">營運人事支出 5%</span><span class="val" id="d-admin"></span></div>
-    <div class="row"><span class="lbl">固定 &amp; 變動辦公支出 10%</span><span class="val" id="d-office"></span></div>
+    <div class="section-title" id="ops-detail-title">營運金明細</div>
+    <div class="row"><span class="lbl">營運人事支出 <span id="dl-admin"></span>%</span><span class="val" id="d-admin"></span></div>
+    <div class="row"><span class="lbl">固定 &amp; 變動辦公支出 <span id="dl-office"></span>%</span><span class="val" id="d-office"></span></div>
+  </div>
+</div>
+
+<!-- 比例調整 -->
+<div id="tab-budgetctrl" style="display:none;">
+  <div class="card" style="margin-bottom:1rem;">
+    <div class="section-title">製作成本比例調整</div>
+    <div style="font-size:12px; color:var(--text-tertiary); margin-bottom:14px;">導演與製片各固定 7.5%（合計 15%）。其餘項目可調整，建議合計維持 47%。</div>
+
+    <div class="range-row">
+      <label>製片（固定 7.5%）→ <span id="pct-pm-amt" style="color:var(--text-secondary);"></span></label>
+      <div class="range-inner">
+        <input type="range" id="pct-pm" min="7.5" max="7.5" value="7.5" step="0.5" disabled style="opacity:0.4;" />
+        <span style="font-size:13px; font-weight:500; min-width:36px; text-align:right;">7.5%</span>
+      </div>
+    </div>
+    <div class="range-row">
+      <label>導演（固定 7.5%）→ <span id="pct-dir-amt" style="color:var(--text-secondary);"></span></label>
+      <div class="range-inner">
+        <input type="range" id="pct-dir" min="7.5" max="7.5" value="7.5" step="0.5" disabled style="opacity:0.4;" />
+        <span style="font-size:13px; font-weight:500; min-width:36px; text-align:right;">7.5%</span>
+      </div>
+    </div>
+    <div class="range-row">
+      <label>拍攝 <span id="pct-shoot-lbl" style="font-weight:500; color:var(--text);">15</span>% → <span id="pct-shoot-amt" style="color:var(--text-secondary);"></span></label>
+      <div class="range-inner">
+        <input type="range" id="pct-shoot" min="0" max="40" value="15" step="1" oninput="syncBudget()" />
+        <span id="pct-shoot-out" style="font-size:13px; font-weight:500; min-width:36px; text-align:right;"></span>
+      </div>
+    </div>
+    <div class="range-row">
+      <label>後期 <span id="pct-post-lbl" style="font-weight:500; color:var(--text);">10</span>% → <span id="pct-post-amt" style="color:var(--text-secondary);"></span></label>
+      <div class="range-inner">
+        <input type="range" id="pct-post" min="0" max="30" value="10" step="1" oninput="syncBudget()" />
+        <span id="pct-post-out" style="font-size:13px; font-weight:500; min-width:36px; text-align:right;"></span>
+      </div>
+    </div>
+    <div class="range-row">
+      <label>雜支 <span id="pct-misc-lbl" style="font-weight:500; color:var(--text);">7</span>% → <span id="pct-misc-amt" style="color:var(--text-secondary);"></span></label>
+      <div class="range-inner">
+        <input type="range" id="pct-misc" min="0" max="20" value="7" step="1" oninput="syncBudget()" />
+        <span id="pct-misc-out" style="font-size:13px; font-weight:500; min-width:36px; text-align:right;"></span>
+      </div>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; border-top:0.5px solid var(--border-md); padding-top:10px; margin-top:4px;">
+      <span style="font-size:13px; color:var(--text-secondary);">製作成本合計</span>
+      <span id="prod-total-check" style="font-size:13px; font-weight:500;"></span>
+    </div>
+    <button onclick="resetProd()" style="margin-top:10px; font-size:12px; color:var(--text-tertiary);">還原預設值</button>
+  </div>
+
+  <div class="card">
+    <div class="section-title">營運金比例調整</div>
+    <div style="font-size:12px; color:var(--text-tertiary); margin-bottom:14px;">合計建議維持 15%。</div>
+    <div class="range-row">
+      <label>營運人事支出 <span id="pct-admin-lbl" style="font-weight:500; color:var(--text);">5</span>% → <span id="pct-admin-amt" style="color:var(--text-secondary);"></span></label>
+      <div class="range-inner">
+        <input type="range" id="pct-admin" min="0" max="15" value="5" step="1" oninput="syncBudget()" />
+        <span id="pct-admin-out" style="font-size:13px; font-weight:500; min-width:36px; text-align:right;"></span>
+      </div>
+    </div>
+    <div class="range-row">
+      <label>固定 &amp; 變動辦公支出 <span id="pct-office-lbl" style="font-weight:500; color:var(--text);">10</span>% → <span id="pct-office-amt" style="color:var(--text-secondary);"></span></label>
+      <div class="range-inner">
+        <input type="range" id="pct-office" min="0" max="15" value="10" step="1" oninput="syncBudget()" />
+        <span id="pct-office-out" style="font-size:13px; font-weight:500; min-width:36px; text-align:right;"></span>
+      </div>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; border-top:0.5px solid var(--border-md); padding-top:10px; margin-top:4px;">
+      <span style="font-size:13px; color:var(--text-secondary);">營運金合計</span>
+      <span id="ops-total-check" style="font-size:13px; font-weight:500;"></span>
+    </div>
+    <button onclick="resetOps()" style="margin-top:10px; font-size:12px; color:var(--text-tertiary);">還原預設值</button>
   </div>
 </div>
 
 <footer>
-  以含稅前案值為計算基礎。營業稅 5% 外加，報價時另計。尾款為製片 / 導演薪酬中預留，不影響總成本結構。
+  以含稅前案值為計算基礎。營業稅 5% 外加，報價時另計。30% 專案利潤為公司保留（設備投資基礎）。預備金 8% 未動用時依股份比例分配。
 </footer>
 
 </div>
@@ -481,20 +399,26 @@ footer {
 <script>
 const TRIGGERS = ['簽約後','前期完成','拍攝完成','粗剪完成','初剪交付','終剪核准','驗收通過','尾款結清'];
 
+const MEMBERS = [
+  { name: 'Peter', share: 0.29, role: '導演', hasSalary: true, salaryKey: 'dir' },
+  { name: '卉',    share: 0.28, role: '製片', hasSalary: true, salaryKey: 'pm'  },
+  { name: 'Penny', share: 0.28, role: '製片', hasSalary: true, salaryKey: 'pm'  },
+  { name: '佳',    share: 0.15, role: '共同創辦', hasSalary: false, salaryKey: null },
+];
+
 let phases = {
   commercial: [{label:'簽約',pct:30,trigger:'簽約後'},{label:'中期',pct:30,trigger:'前期完成'},{label:'尾款',pct:40,trigger:'驗收通過'}],
-  tender: [{label:'預付',pct:30,trigger:'簽約後'},{label:'期中',pct:30,trigger:'拍攝完成'},{label:'驗收',pct:40,trigger:'驗收通過'}]
+  tender:     [{label:'預付',pct:30,trigger:'簽約後'},{label:'期中',pct:30,trigger:'拍攝完成'},{label:'驗收',pct:40,trigger:'驗收通過'}]
 };
 
 let activeTab = 'commercial';
 
-function fmt(n) {
-  return 'NT$' + Math.round(n).toLocaleString();
-}
+function fmt(n) { return 'NT$' + Math.round(n).toLocaleString(); }
+function pctFmt(n) { return Math.round(n * 10) / 10 + '%'; }
 
 function switchTab(tab, btn) {
   activeTab = tab;
-  ['commercial','tender','payout','production'].forEach(t => {
+  ['commercial','tender','payout','production','budgetctrl'].forEach(t => {
     document.getElementById('tab-'+t).style.display = (t === tab) ? '' : 'none';
   });
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -502,31 +426,84 @@ function switchTab(tab, btn) {
   recalc();
 }
 
+function getPcts() {
+  return {
+    pm:     7.5 / 100,
+    dir:    7.5 / 100,
+    shoot:  parseFloat(document.getElementById('pct-shoot').value) / 100,
+    post:   parseFloat(document.getElementById('pct-post').value) / 100,
+    misc:   parseFloat(document.getElementById('pct-misc').value) / 100,
+    admin:  parseFloat(document.getElementById('pct-admin').value) / 100,
+    office: parseFloat(document.getElementById('pct-office').value) / 100,
+  };
+}
+
+function syncBudget() {
+  const base = parseFloat(document.getElementById('projectValue').value) || 0;
+  const p = getPcts();
+
+  const adjustable = ['shoot','post','misc'];
+  adjustable.forEach(k => {
+    const v = Math.round(p[k] * 100);
+    document.getElementById('pct-'+k+'-lbl').textContent = v;
+    document.getElementById('pct-'+k+'-out').textContent = v + '%';
+    document.getElementById('pct-'+k+'-amt').textContent = fmt(base * p[k]);
+  });
+  ['admin','office'].forEach(k => {
+    const v = Math.round(p[k] * 100);
+    document.getElementById('pct-'+k+'-lbl').textContent = v;
+    document.getElementById('pct-'+k+'-out').textContent = v + '%';
+    document.getElementById('pct-'+k+'-amt').textContent = fmt(base * p[k]);
+  });
+
+  document.getElementById('pct-pm-amt').textContent = fmt(base * p.pm);
+  document.getElementById('pct-dir-amt').textContent = fmt(base * p.dir);
+
+  const prodTotal = Math.round((p.pm + p.dir + p.shoot + p.post + p.misc) * 100 * 10) / 10;
+  const opsTotal  = Math.round((p.admin + p.office) * 100 * 10) / 10;
+
+  const ptEl = document.getElementById('prod-total-check');
+  ptEl.textContent = prodTotal + '%' + (prodTotal === 47 ? ' ✓' : '（預設 47%）');
+  ptEl.style.color = prodTotal === 47 ? 'var(--text-success)' : 'var(--text-warning)';
+
+  const otEl = document.getElementById('ops-total-check');
+  otEl.textContent = opsTotal + '%' + (opsTotal === 15 ? ' ✓' : '（預設 15%）');
+  otEl.style.color = opsTotal === 15 ? 'var(--text-success)' : 'var(--text-warning)';
+
+  recalc();
+}
+
+function resetProd() {
+  document.getElementById('pct-shoot').value = 15;
+  document.getElementById('pct-post').value  = 10;
+  document.getElementById('pct-misc').value  = 7;
+  syncBudget();
+}
+
+function resetOps() {
+  document.getElementById('pct-admin').value  = 5;
+  document.getElementById('pct-office').value = 10;
+  syncBudget();
+}
+
 function applyCommercialPreset() {
   const v = document.getElementById('commercialPreset').value;
-  if (v === '3-3-4') phases.commercial = [{label:'簽約',pct:30,trigger:'簽約後'},{label:'中期',pct:30,trigger:'前期完成'},{label:'尾款',pct:40,trigger:'驗收通過'}];
-  else if (v === '5-1-4') phases.commercial = [{label:'簽約',pct:50,trigger:'簽約後'},{label:'中期',pct:10,trigger:'拍攝完成'},{label:'尾款',pct:40,trigger:'驗收通過'}];
+  if (v === '3-3-4')   phases.commercial = [{label:'簽約',pct:30,trigger:'簽約後'},{label:'中期',pct:30,trigger:'前期完成'},{label:'尾款',pct:40,trigger:'驗收通過'}];
+  else if (v === '5-1-4')   phases.commercial = [{label:'簽約',pct:50,trigger:'簽約後'},{label:'中期',pct:10,trigger:'拍攝完成'},{label:'尾款',pct:40,trigger:'驗收通過'}];
   else if (v === '4-3-2-1') phases.commercial = [{label:'簽約',pct:40,trigger:'簽約後'},{label:'前期',pct:30,trigger:'前期完成'},{label:'剪輯',pct:20,trigger:'粗剪完成'},{label:'尾款',pct:10,trigger:'驗收通過'}];
   recalc();
 }
 
 function applyTenderPreset() {
   const v = document.getElementById('tenderPreset').value;
-  if (v === '3-7') phases.tender = [{label:'預付',pct:30,trigger:'簽約後'},{label:'驗收',pct:70,trigger:'驗收通過'}];
-  else if (v === '3-3-4') phases.tender = [{label:'第一期',pct:30,trigger:'簽約後'},{label:'第二期',pct:30,trigger:'拍攝完成'},{label:'驗收',pct:40,trigger:'驗收通過'}];
+  if (v === '3-7')     phases.tender = [{label:'預付',pct:30,trigger:'簽約後'},{label:'驗收',pct:70,trigger:'驗收通過'}];
+  else if (v === '3-3-4')   phases.tender = [{label:'第一期',pct:30,trigger:'簽約後'},{label:'第二期',pct:30,trigger:'拍攝完成'},{label:'驗收',pct:40,trigger:'驗收通過'}];
   else if (v === '1-3-3-3') phases.tender = [{label:'預付',pct:10,trigger:'簽約後'},{label:'一期',pct:30,trigger:'前期完成'},{label:'二期',pct:30,trigger:'拍攝完成'},{label:'驗收',pct:30,trigger:'驗收通過'}];
   recalc();
 }
 
-function addPhase(type) {
-  phases[type].push({label:'新增期', pct:0, trigger:'驗收通過'});
-  recalc();
-}
-
-function removePhase(type, idx) {
-  phases[type].splice(idx, 1);
-  recalc();
-}
+function addPhase(type) { phases[type].push({label:'新增期',pct:0,trigger:'驗收通過'}); recalc(); }
+function removePhase(type, idx) { phases[type].splice(idx,1); recalc(); }
 
 function renderPhases(type, base) {
   const container = document.getElementById(type+'-phases');
@@ -552,89 +529,130 @@ function renderPhases(type, base) {
 
 function renderSchedule(type, base) {
   const el = document.getElementById(type+'-schedule');
-  let html = '';
-  let cum = 0;
   const colors = ['#378ADD','#1D9E75','#BA7517','#534AB7','#D85A30','#3B6D11'];
+  let html = ''; let cum = 0;
   phases[type].forEach((p, i) => {
     const amt = base * p.pct / 100;
     cum += p.pct;
-    const c = colors[i % colors.length];
-    html += `<div style="margin-bottom:12px;">`;
-    html += `<div style="display:flex; justify-content:space-between; align-items:baseline;">`;
-    html += `<span style="font-size:13px; font-weight:500;">${p.label}</span>`;
-    html += `<span style="font-size:13px;">${fmt(amt)} <span style="font-size:11px; color:var(--text-tertiary);">（含稅 ${fmt(amt*1.05)}）</span></span>`;
-    html += `</div>`;
-    html += `<div class="phase-bar-wrap"><div class="phase-bar-fill" style="width:${p.pct}%; background:${c};"></div></div>`;
-    html += `<div style="font-size:11px; color:var(--text-secondary);">${p.pct}% · 觸發：${p.trigger} · 累計 ${cum}%</div>`;
-    html += `</div>`;
+    html += `<div style="margin-bottom:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline;">
+        <span style="font-size:13px; font-weight:500;">${p.label}</span>
+        <span style="font-size:13px;">${fmt(amt)} <span style="font-size:11px; color:var(--text-tertiary);">（含稅 ${fmt(amt*1.05)}）</span></span>
+      </div>
+      <div class="phase-bar-wrap"><div class="phase-bar-fill" style="width:${p.pct}%; background:${colors[i%colors.length]};"></div></div>
+      <div style="font-size:11px; color:var(--text-secondary);">${p.pct}% · 觸發：${p.trigger} · 累計 ${cum}%</div>
+    </div>`;
   });
   el.innerHTML = html;
 }
 
 function recalc() {
   const base = parseFloat(document.getElementById('projectValue').value) || 0;
+  const p = getPcts();
 
   document.getElementById('withTax').textContent = fmt(base * 1.05);
-  document.getElementById('m-prod').textContent = fmt(base * 0.47);
-  document.getElementById('m-ops').textContent = fmt(base * 0.15);
+
+  const prodTotal = p.pm + p.dir + p.shoot + p.post + p.misc;
+  const opsTotal  = p.admin + p.office;
+  const prodPct   = Math.round(prodTotal * 100 * 10) / 10;
+  const opsPct    = Math.round(opsTotal  * 100 * 10) / 10;
+
+  document.getElementById('lbl-prod').textContent = '製作成本 ' + prodPct + '%';
+  document.getElementById('lbl-ops').textContent  = '營運金 ' + opsPct + '%';
+  document.getElementById('m-prod').textContent   = fmt(base * prodTotal);
+  document.getElementById('m-ops').textContent    = fmt(base * opsTotal);
   document.getElementById('m-profit').textContent = fmt(base * 0.30);
-  document.getElementById('m-reserve').textContent = fmt(base * 0.08);
-  document.getElementById('d-pm').textContent = fmt(base * 0.07);
-  document.getElementById('d-dir').textContent = fmt(base * 0.08);
-  document.getElementById('d-shoot').textContent = fmt(base * 0.15);
-  document.getElementById('d-post').textContent = fmt(base * 0.10);
-  document.getElementById('d-misc').textContent = fmt(base * 0.07);
-  document.getElementById('d-total').textContent = fmt(base * 0.47);
-  document.getElementById('d-admin').textContent = fmt(base * 0.05);
-  document.getElementById('d-office').textContent = fmt(base * 0.10);
+  document.getElementById('m-reserve').textContent= fmt(base * 0.08);
+
+  // 製作明細 labels
+  document.getElementById('dl-pm').textContent    = '7.5';
+  document.getElementById('dl-dir').textContent   = '7.5';
+  document.getElementById('dl-shoot').textContent = Math.round(p.shoot*100);
+  document.getElementById('dl-post').textContent  = Math.round(p.post*100);
+  document.getElementById('dl-misc').textContent  = Math.round(p.misc*100);
+  document.getElementById('dl-admin').textContent = Math.round(p.admin*100);
+  document.getElementById('dl-office').textContent= Math.round(p.office*100);
+
+  document.getElementById('prod-detail-title').textContent = '製作成本明細（' + prodPct + '%）';
+  document.getElementById('ops-detail-title').textContent  = '營運金明細（' + opsPct + '%）';
+
+  document.getElementById('d-pm').textContent    = fmt(base * p.pm);
+  document.getElementById('d-dir').textContent   = fmt(base * p.dir);
+  document.getElementById('d-shoot').textContent = fmt(base * p.shoot);
+  document.getElementById('d-post').textContent  = fmt(base * p.post);
+  document.getElementById('d-misc').textContent  = fmt(base * p.misc);
+  document.getElementById('d-total').textContent = fmt(base * prodTotal);
+  document.getElementById('d-admin').textContent = fmt(base * p.admin);
+  document.getElementById('d-office').textContent= fmt(base * p.office);
 
   renderPhases('commercial', base);
   renderPhases('tender', base);
 
-  const reservePct = parseInt(document.getElementById('reserveUsed').value) / 100;
-  const companyKeepPct = parseInt(document.getElementById('companyKeep').value) / 100;
-  const tailPct = parseInt(document.getElementById('tailPct').value) / 100;
-  const headcount = parseInt(document.getElementById('headcount').value) || 1;
-  const splitMode = document.getElementById('splitMode').value;
+  // 分潤計算
+  const reserveUsedPct = parseInt(document.getElementById('reserveUsed').value) / 100;
+  document.getElementById('reserveUsedPct').textContent = Math.round(reserveUsedPct * 100) + '%';
 
-  document.getElementById('reserveUsedPct').textContent = Math.round(reservePct*100) + '%';
-  document.getElementById('companyKeepPct').textContent = Math.round(companyKeepPct*100) + '%';
-  document.getElementById('tailPctOut').textContent = Math.round(tailPct*100) + '%';
+  const reserveTotal = base * 0.08;
+  const reserveLeft  = reserveTotal * (1 - reserveUsedPct);
 
-  const profit = base * 0.30;
-  const reserve = base * 0.08;
-  const pmBase = base * 0.07;
-  const dirBase = base * 0.08;
+  document.getElementById('reserve-total').textContent = fmt(reserveTotal);
+  document.getElementById('reserve-left').textContent  = fmt(reserveLeft);
+  document.getElementById('s-total').textContent       = fmt(reserveLeft);
 
-  const reserveLeft = reserve * (1 - reservePct);
-  const teamShare = profit * (1 - companyKeepPct);
-  const companyShare = profit * companyKeepPct;
-  const pmTail = pmBase * tailPct;
-  const dirTail = dirBase * tailPct;
-  const totalDist = reserveLeft + teamShare;
-
-  document.getElementById('s-reserve').textContent = fmt(reserveLeft);
-  document.getElementById('s-team').textContent = fmt(teamShare);
-  document.getElementById('s-company').textContent = fmt(companyShare);
-  document.getElementById('s-pm-tail').textContent = fmt(pmTail);
-  document.getElementById('s-dir-tail').textContent = fmt(dirTail);
-  document.getElementById('s-total').textContent = fmt(totalDist + pmTail + dirTail);
-
-  let rows = '';
-  if (splitMode === 'equal') {
-    const per = totalDist / headcount;
-    rows = `<div style="font-size:13px; color:var(--text-secondary);">每人分潤（不含尾款）：<span style="font-weight:500; color:var(--text);">${fmt(per)}</span>（共 ${headcount} 人平均）</div>`;
-  } else {
-    const others = Math.max(0, headcount - 2);
-    const totalW = 1.5 + 1.2 + others * 1.0;
-    const unit = totalDist / totalW;
-    rows = `<div class="sub-grid">
-      <div class="metric"><div class="lbl">導演（1.5x）</div><div style="font-size:16px;font-weight:500;">${fmt(unit*1.5)}</div></div>
-      <div class="metric"><div class="lbl">製片（1.2x）</div><div style="font-size:16px;font-weight:500;">${fmt(unit*1.2)}</div></div>
-      <div class="metric"><div class="lbl">其他 ×${others}（1x）</div><div style="font-size:16px;font-weight:500;">${fmt(unit)} /人</div></div>
+  // 股份分潤卡片
+  let shareHtml = '';
+  MEMBERS.forEach(m => {
+    const dist = reserveLeft * m.share;
+    const salaryAmt = m.hasSalary ? base * p[m.salaryKey] : 0;
+    shareHtml += `<div class="share-card">
+      <div class="name">${m.name}</div>
+      <div class="pct">${m.role}・股份 ${Math.round(m.share*100)}%</div>
+      <div class="amt">${fmt(dist)}</div>
+      ${m.hasSalary ? `<div class="salary">薪酬另計 ${fmt(salaryAmt)}</div>` : `<div class="salary">純股東，僅領分潤</div>`}
     </div>`;
-  }
-  document.getElementById('perPersonTable').innerHTML = rows;
+  });
+  document.getElementById('share-grid').innerHTML = shareHtml;
+
+  // 單案總收入
+  let totalHtml = '';
+  MEMBERS.forEach(m => {
+    const dist = reserveLeft * m.share;
+    const salaryAmt = m.hasSalary ? base * p[m.salaryKey] : 0;
+    const total = dist + salaryAmt;
+    totalHtml += `<div class="share-card">
+      <div class="name">${m.name}</div>
+      <div class="pct">${m.role}</div>
+      <div class="amt">${fmt(total)}</div>
+      <div class="salary">${m.hasSalary ? '薪酬 '+fmt(salaryAmt)+' + 分潤 '+fmt(dist) : '分潤 '+fmt(dist)}</div>
+    </div>`;
+  });
+  document.getElementById('total-income-grid').innerHTML = totalHtml;
+
+  // 同步比例調整頁
+  syncBudgetDisplay(base, p);
+}
+
+function syncBudgetDisplay(base, p) {
+  document.getElementById('pct-pm-amt').textContent  = fmt(base * p.pm);
+  document.getElementById('pct-dir-amt').textContent = fmt(base * p.dir);
+  ['shoot','post','misc'].forEach(k => {
+    const v = Math.round(p[k]*100);
+    if(document.getElementById('pct-'+k+'-lbl')) document.getElementById('pct-'+k+'-lbl').textContent = v;
+    if(document.getElementById('pct-'+k+'-out')) document.getElementById('pct-'+k+'-out').textContent = v+'%';
+    if(document.getElementById('pct-'+k+'-amt')) document.getElementById('pct-'+k+'-amt').textContent = fmt(base*p[k]);
+  });
+  ['admin','office'].forEach(k => {
+    const v = Math.round(p[k]*100);
+    if(document.getElementById('pct-'+k+'-lbl')) document.getElementById('pct-'+k+'-lbl').textContent = v;
+    if(document.getElementById('pct-'+k+'-out')) document.getElementById('pct-'+k+'-out').textContent = v+'%';
+    if(document.getElementById('pct-'+k+'-amt')) document.getElementById('pct-'+k+'-amt').textContent = fmt(base*p[k]);
+  });
+  const prodTotal = Math.round((p.pm+p.dir+p.shoot+p.post+p.misc)*100*10)/10;
+  const opsTotal  = Math.round((p.admin+p.office)*100*10)/10;
+  const ptEl = document.getElementById('prod-total-check');
+  if(ptEl){ ptEl.textContent = prodTotal+'%'+(prodTotal===47?' ✓':'（預設 47%）'); ptEl.style.color = prodTotal===47?'var(--text-success)':'var(--text-warning)'; }
+  const otEl = document.getElementById('ops-total-check');
+  if(otEl){ otEl.textContent = opsTotal+'%'+(opsTotal===15?' ✓':'（預設 15%）'); otEl.style.color = opsTotal===15?'var(--text-success)':'var(--text-warning)'; }
 }
 
 applyCommercialPreset();
