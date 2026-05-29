@@ -330,7 +330,7 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
   </div>
   <div class="card">
     <div class="section-title">營運金比例調整</div>
-    <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px;">合計建議維持 15%。</div>
+    <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px;">合計建議維持 10–15%。</div>
     <div class="range-row">
       <label>營運人事支出 <span id="pct-admin-lbl">5</span>% → <span id="pct-admin-amt" style="color:var(--text-secondary);"></span></label>
       <div class="range-inner">
@@ -582,8 +582,8 @@ function syncBudget() {
   ptEl.textContent = prodTotal+'%'+(prodTotal>=40&&prodTotal<=45?' ✓':'（建議 40–45%）');
   ptEl.style.color = prodTotal>=40&&prodTotal<=45?'var(--text-success)':'var(--text-warning)';
   const otEl = document.getElementById('ops-total-check');
-  otEl.textContent = opsTotal+'%'+(opsTotal===15?' ✓':'（預設 15%）');
-  otEl.style.color = opsTotal===15?'var(--text-success)':'var(--text-warning)';
+  otEl.textContent = opsTotal+'%'+(opsTotal>=10&&opsTotal<=15?' ✓':'（建議 10–15%）');
+  otEl.style.color = opsTotal>=10&&opsTotal<=15?'var(--text-success)':'var(--text-warning)';
   recalc();
 }
 
@@ -775,7 +775,7 @@ function recalc() {
   const ptEl=document.getElementById('prod-total-check');
   const otEl=document.getElementById('ops-total-check');
   if(ptEl){ ptEl.textContent=pt+'%'+(pt>=40&&pt<=45?' ✓':'（建議 40–45%）'); ptEl.style.color=pt>=40&&pt<=45?'var(--text-success)':'var(--text-warning)'; }
-  if(otEl){ otEl.textContent=ot+'%'+(ot===15?' ✓':'（預設 15%）'); otEl.style.color=ot===15?'var(--text-success)':'var(--text-warning)'; }
+  if(otEl){ otEl.textContent=ot+'%'+(ot>=10&&ot<=15?' ✓':'（建議 10–15%）'); otEl.style.color=ot>=10&&ot<=15?'var(--text-success)':'var(--text-warning)'; }
 
   scheduleSave();
 }
