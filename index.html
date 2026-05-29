@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>一路拍影像有限公司 — 專案經費試算</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -68,7 +69,7 @@ button:active { transform:scale(0.98); }
 .share-card .salary { font-size:11px; color:var(--text-secondary); margin-top:3px; }
 .member-role-block { border:0.5px solid var(--border); border-radius:var(--radius-md); padding:12px 14px; margin-bottom:10px; }
 .role-chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
-.role-chip { display:inline-flex; align-items:center; gap:4px; background:var(--bg-secondary); border:0.5px solid var(--border-md); border-radius:20px; padding:3px 10px 3px 10px; font-size:12px; cursor:default; }
+.role-chip { display:inline-flex; align-items:center; gap:4px; background:var(--bg-secondary); border:0.5px solid var(--border-md); border-radius:20px; padding:3px 10px; font-size:12px; cursor:default; }
 .role-chip.active { background:var(--bg-info); border-color:var(--accent); color:var(--text-info); }
 .role-chip button { border:none; background:transparent; padding:0; font-size:13px; cursor:pointer; color:inherit; line-height:1; margin-left:2px; }
 .photo-rule { background:var(--bg-warning); border:0.5px solid var(--border); border-radius:var(--radius-md); padding:10px 12px; margin-top:8px; font-size:12px; }
@@ -77,14 +78,45 @@ button:active { transform:scale(0.98); }
 .photo-inputs input { width:90px; }
 footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(--border); padding-top:0.75rem; margin-top:1rem; }
 @media (max-width:540px) { .two-col { grid-template-columns:1fr; } .phase-grid { grid-template-columns:1fr 60px 1fr 24px; } }
+/* Auth */
+#auth-overlay { position:fixed; inset:0; background:var(--bg-tertiary); display:flex; align-items:center; justify-content:center; z-index:100; }
+#login-box { background:var(--bg); border:0.5px solid var(--border-md); border-radius:var(--radius-lg); padding:2rem; width:320px; max-width:90vw; }
+#login-box h2 { font-size:18px; font-weight:500; margin-bottom:4px; }
+#login-box .sub { font-size:13px; color:var(--text-tertiary); margin-bottom:1.5rem; }
+#login-box input { width:100%; margin-bottom:10px; display:block; }
+#login-btn { width:100%; background:var(--accent); color:#fff; border:none; padding:9px; font-size:14px; border-radius:var(--radius-md); cursor:pointer; font-family:inherit; }
+#login-btn:hover { opacity:0.88; }
+#login-btn:disabled { opacity:0.6; cursor:not-allowed; }
+#login-error { font-size:12px; color:var(--text-danger); margin-top:8px; min-height:16px; }
 </style>
 </head>
 <body>
-<div class="container">
+
+<div id="auth-overlay">
+  <div id="login-box">
+    <h2>一路拍影像有限公司</h2>
+    <p class="sub">登入以使用專案試算</p>
+    <input type="email" id="login-email" placeholder="電子郵件" autocomplete="email" />
+    <input type="password" id="login-password" placeholder="密碼" autocomplete="current-password" onkeydown="if(event.key==='Enter')signIn()" />
+    <button id="login-btn" onclick="signIn()">登入</button>
+    <div id="login-error"></div>
+  </div>
+</div>
+
+<div class="container" id="main-app" style="display:none;">
 <header>
-  <h1>一路拍影像有限公司</h1>
-  <p style="font-size:15px;color:var(--text-secondary);margin-bottom:2px;">專案經費試算</p>
-  <p>商案 / 標案分期給付 · 製作成本明細 · 股份分潤</p>
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
+    <div>
+      <h1>一路拍影像有限公司</h1>
+      <p style="font-size:15px;color:var(--text-secondary);margin-bottom:2px;">專案經費試算</p>
+      <p>商案 / 標案分期給付 · 製作成本明細 · 股份分潤</p>
+    </div>
+    <div style="text-align:right;flex-shrink:0;">
+      <div id="user-info" style="font-size:12px;color:var(--text-tertiary);margin-bottom:4px;"></div>
+      <div id="save-status" style="font-size:11px;color:var(--text-tertiary);margin-bottom:6px;min-height:14px;"></div>
+      <button onclick="signOut()" style="font-size:12px;color:var(--text-tertiary);">登出</button>
+    </div>
+  </div>
 </header>
 
 <div class="card">
@@ -187,7 +219,6 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
       </div>
     </div>
   </div>
-
   <div class="card">
     <div class="section-title">四位成員職位設定</div>
     <div class="hint" style="margin-bottom:14px;">選擇本案職位後，自動帶入製作成本薪酬與分潤機制。可多選（複合職位）。外包人員不在此設定，直接計入製作成本。</div>
@@ -210,7 +241,6 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
       <span>預備金總額：<span id="reserve-total" style="font-weight:500;"></span></span>
     </div>
   </div>
-
   <div class="card">
     <div class="section-title">股份分潤明細</div>
     <div class="hint" style="margin-bottom:12px;">30% 專案利潤為公司保留。分潤來源為預備金未動用部分，依出資比例分配。</div>
@@ -220,7 +250,6 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
       <span id="s-total" style="font-weight:500;font-size:15px;color:var(--text-success);"></span>
     </div>
   </div>
-
   <div class="card">
     <div class="section-title">各成員單案總收入（薪酬 + 分潤）</div>
     <div class="hint" style="margin-bottom:12px;">薪酬依本案職位設定自動計算。未設定職位或職位無薪酬（如攝影外包）者，僅計分潤。</div>
@@ -329,6 +358,103 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
 </div>
 
 <script>
+const SUPABASE_URL = 'https://REDACTED_PROJECT.supabase.co';
+const SUPABASE_KEY = 'REDACTED';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let saveTimer = null;
+let isReady = false;
+
+async function signIn() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const btn = document.getElementById('login-btn');
+  btn.textContent = '登入中…';
+  btn.disabled = true;
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  btn.textContent = '登入';
+  btn.disabled = false;
+  if (error) document.getElementById('login-error').textContent = '帳號或密碼錯誤';
+}
+
+async function signOut() {
+  isReady = false;
+  await sb.auth.signOut();
+}
+
+sb.auth.onAuthStateChange((event, session) => {
+  if (session) {
+    document.getElementById('auth-overlay').style.display = 'none';
+    document.getElementById('main-app').style.display = '';
+    document.getElementById('user-info').textContent = session.user.email;
+    loadSettings();
+  } else {
+    document.getElementById('auth-overlay').style.display = '';
+    document.getElementById('main-app').style.display = 'none';
+  }
+});
+
+function getState() {
+  return {
+    projectValue: document.getElementById('projectValue').value,
+    photoFull: document.getElementById('photoFull').value,
+    photoHalf: document.getElementById('photoHalf').value,
+    photoFullDays: document.getElementById('photoFullDays').value,
+    photoHalfDays: document.getElementById('photoHalfDays').value,
+    pctShoot: document.getElementById('pct-shoot').value,
+    pctPost: document.getElementById('pct-post').value,
+    pctMisc: document.getElementById('pct-misc').value,
+    pctAdmin: document.getElementById('pct-admin').value,
+    pctOffice: document.getElementById('pct-office').value,
+    reserveUsed: document.getElementById('reserveUsed').value,
+    phases,
+    memberRoles: MEMBERS.map(m => ({ id: m.id, roles: [...m.roles] })),
+  };
+}
+
+function setState(d) {
+  if (!d || !Object.keys(d).length) return;
+  const set = (id, v) => { if (v !== undefined && v !== null) { const el = document.getElementById(id); if (el) el.value = v; } };
+  set('projectValue', d.projectValue);
+  set('photoFull', d.photoFull);
+  set('photoHalf', d.photoHalf);
+  set('photoFullDays', d.photoFullDays);
+  set('photoHalfDays', d.photoHalfDays);
+  set('pct-shoot', d.pctShoot);
+  set('pct-post', d.pctPost);
+  set('pct-misc', d.pctMisc);
+  set('pct-admin', d.pctAdmin);
+  set('pct-office', d.pctOffice);
+  set('reserveUsed', d.reserveUsed);
+  if (d.phases) phases = d.phases;
+  if (d.memberRoles) d.memberRoles.forEach(mr => {
+    const m = MEMBERS.find(x => x.id === mr.id);
+    if (m) m.roles = mr.roles || [];
+  });
+}
+
+async function loadSettings() {
+  const { data } = await sb.from('settings').select('data').eq('id', 1).single();
+  if (data?.data) setState(data.data);
+  renderMemberRoles();
+  recalc();
+  isReady = true;
+}
+
+function scheduleSave() {
+  if (!isReady) return;
+  clearTimeout(saveTimer);
+  document.getElementById('save-status').textContent = '未儲存…';
+  saveTimer = setTimeout(doSave, 1500);
+}
+
+async function doSave() {
+  const { error } = await sb.from('settings').upsert({ id: 1, data: getState(), updated_at: new Date().toISOString() });
+  if (!error) {
+    document.getElementById('save-status').textContent = '已儲存 ✓';
+    setTimeout(() => { const el = document.getElementById('save-status'); if (el && el.textContent === '已儲存 ✓') el.textContent = ''; }, 2000);
+  }
+}
+
 const TRIGGERS = ['簽約後','前期完成','拍攝完成','粗剪完成','初剪交付','終剪核准','驗收通過','尾款結清'];
 
 const ROLE_DEFS = {
@@ -388,7 +514,6 @@ function renderMemberRoles() {
   const container = document.getElementById('member-roles-ui');
   let html = '';
   MEMBERS.forEach(m => {
-    const roleKeys = Object.keys(ROLE_DEFS);
     html += `<div class="member-role-block">`;
     html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">`;
     html += `<span style="font-size:14px;font-weight:500;">${m.name}</span>`;
@@ -398,7 +523,7 @@ function renderMemberRoles() {
     html += `</div></div>`;
     html += `<div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;margin-bottom:4px;">本案職位（可多選）</div>`;
     html += `<div class="role-chips">`;
-    roleKeys.forEach(rk => {
+    Object.keys(ROLE_DEFS).forEach(rk => {
       const rd = ROLE_DEFS[rk];
       const active = m.roles.includes(rk);
       html += `<span class="role-chip${active?' active':''}" onclick="toggleRole('${m.id}','${rk}')" style="cursor:pointer;">`;
@@ -424,9 +549,7 @@ function getMemberSalary(member, base, p) {
   let total = 0;
   member.roles.forEach(rk => {
     const rd = ROLE_DEFS[rk];
-    if (rd.salaryKey && p[rd.salaryKey]) {
-      total += base * p[rd.salaryKey];
-    }
+    if (rd.salaryKey && p[rd.salaryKey]) total += base * p[rd.salaryKey];
   });
   return total;
 }
@@ -500,9 +623,9 @@ function renderPhases(type, base) {
   let html='';
   phases[type].forEach((p,i) => {
     html+=`<div class="phase-grid" style="margin-bottom:6px;">`;
-    html+=`<input type="text" value="${p.label}" style="font-size:13px;" oninput="phases['${type}'][${i}].label=this.value;renderSchedule('${type}',${base});" />`;
+    html+=`<input type="text" value="${p.label}" style="font-size:13px;" oninput="phases['${type}'][${i}].label=this.value;renderSchedule('${type}',${base});scheduleSave();" />`;
     html+=`<input type="number" value="${p.pct}" min="0" max="100" style="font-size:13px;" oninput="phases['${type}'][${i}].pct=parseFloat(this.value)||0;recalc();" />`;
-    html+=`<select style="font-size:12px;" onchange="phases['${type}'][${i}].trigger=this.value;renderSchedule('${type}',${base});">`;
+    html+=`<select style="font-size:12px;" onchange="phases['${type}'][${i}].trigger=this.value;renderSchedule('${type}',${base});scheduleSave();">`;
     TRIGGERS.forEach(t=>{html+=`<option value="${t}"${p.trigger===t?' selected':''}>${t}</option>`;});
     html+=`</select>`;
     html+=`<button onclick="removePhase('${type}',${i})" style="font-size:13px;padding:2px 6px;">×</button>`;
@@ -654,6 +777,8 @@ function recalc() {
   const otEl=document.getElementById('ops-total-check');
   if(ptEl){ ptEl.textContent=pt+'%'+(pt===47?' ✓':'（預設 47%）'); ptEl.style.color=pt===47?'var(--text-success)':'var(--text-warning)'; }
   if(otEl){ otEl.textContent=ot+'%'+(ot===15?' ✓':'（預設 15%）'); otEl.style.color=ot===15?'var(--text-success)':'var(--text-warning)'; }
+
+  scheduleSave();
 }
 
 applyCommercialPreset();
