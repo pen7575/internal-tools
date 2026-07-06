@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>一路拍影像有限公司 — 專案經費試算</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -358,8 +359,6 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
 </div>
 
 <script>
-const SUPABASE_URL = 'https://REDACTED_PROJECT.supabase.co';
-const SUPABASE_KEY = 'REDACTED';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let saveTimer = null;
 let isReady = false;
