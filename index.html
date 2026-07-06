@@ -4,8 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>一路拍影像有限公司 — 專案經費試算</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -79,32 +77,11 @@ button:active { transform:scale(0.98); }
 .photo-inputs input { width:90px; }
 footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(--border); padding-top:0.75rem; margin-top:1rem; }
 @media (max-width:540px) { .two-col { grid-template-columns:1fr; } .phase-grid { grid-template-columns:1fr 60px 1fr 24px; } }
-/* Auth */
-#auth-overlay { position:fixed; inset:0; background:var(--bg-tertiary); display:flex; align-items:center; justify-content:center; z-index:100; }
-#login-box { background:var(--bg); border:0.5px solid var(--border-md); border-radius:var(--radius-lg); padding:2rem; width:320px; max-width:90vw; }
-#login-box h2 { font-size:18px; font-weight:500; margin-bottom:4px; }
-#login-box .sub { font-size:13px; color:var(--text-tertiary); margin-bottom:1.5rem; }
-#login-box input { width:100%; margin-bottom:10px; display:block; padding:11px 12px; font-size:15px; }
-#login-btn { width:100%; background:var(--accent); color:#fff; border:none; padding:9px; font-size:14px; border-radius:var(--radius-md); cursor:pointer; font-family:inherit; }
-#login-btn:hover { opacity:0.88; }
-#login-btn:disabled { opacity:0.6; cursor:not-allowed; }
-#login-error { font-size:12px; color:var(--text-danger); margin-top:8px; min-height:16px; }
 </style>
 </head>
 <body>
 
-<div id="auth-overlay">
-  <div id="login-box">
-    <h2>一路拍影像有限公司</h2>
-    <p class="sub">登入以使用專案試算</p>
-    <input type="email" id="login-email" placeholder="電子郵件" autocomplete="email" />
-    <input type="password" id="login-password" placeholder="密碼" autocomplete="current-password" onkeydown="if(event.key==='Enter')signIn()" />
-    <button id="login-btn" onclick="signIn()">登入</button>
-    <div id="login-error"></div>
-  </div>
-</div>
-
-<div class="container" id="main-app" style="display:none;">
+<div class="container" id="main-app">
 <header>
   <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
     <div>
@@ -113,9 +90,7 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
       <p>商案 / 標案分期給付 · 製作成本明細 · 股份分潤</p>
     </div>
     <div style="text-align:right;flex-shrink:0;">
-      <div id="user-info" style="font-size:12px;color:var(--text-tertiary);margin-bottom:4px;"></div>
       <div id="save-status" style="font-size:11px;color:var(--text-tertiary);margin-bottom:6px;min-height:14px;"></div>
-      <button onclick="signOut()" style="font-size:12px;color:var(--text-tertiary);">登出</button>
     </div>
   </div>
 </header>
@@ -359,38 +334,8 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
 </div>
 
 <script>
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let saveTimer = null;
 let isReady = false;
-
-async function signIn() {
-  const email = document.getElementById('login-email').value.trim();
-  const password = document.getElementById('login-password').value;
-  const btn = document.getElementById('login-btn');
-  btn.textContent = '登入中…';
-  btn.disabled = true;
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  btn.textContent = '登入';
-  btn.disabled = false;
-  if (error) document.getElementById('login-error').textContent = '帳號或密碼錯誤';
-}
-
-async function signOut() {
-  isReady = false;
-  await sb.auth.signOut();
-}
-
-sb.auth.onAuthStateChange((event, session) => {
-  if (session) {
-    document.getElementById('auth-overlay').style.display = 'none';
-    document.getElementById('main-app').style.display = '';
-    document.getElementById('user-info').textContent = session.user.email;
-    loadSettings();
-  } else {
-    document.getElementById('auth-overlay').style.display = '';
-    document.getElementById('main-app').style.display = 'none';
-  }
-});
 
 function getState() {
   return {
@@ -435,9 +380,14 @@ function setState(d) {
   });
 }
 
-async function loadSettings() {
-  const { data } = await sb.from('settings').select('data').eq('id', 1).single();
-  if (data?.data) setState(data.data);
+function loadSettings() {
+  const saved = localStorage.getItem('eeluimagery-settings');
+  if (saved) {
+    setState(JSON.parse(saved));
+  } else {
+    applyCommercialPreset();
+    applyTenderPreset();
+  }
   renderMemberRoles();
   recalc();
   isReady = true;
@@ -450,12 +400,10 @@ function scheduleSave() {
   saveTimer = setTimeout(doSave, 1500);
 }
 
-async function doSave() {
-  const { error } = await sb.from('settings').upsert({ id: 1, data: getState(), updated_at: new Date().toISOString() });
-  if (!error) {
-    document.getElementById('save-status').textContent = '已儲存 ✓';
-    setTimeout(() => { const el = document.getElementById('save-status'); if (el && el.textContent === '已儲存 ✓') el.textContent = ''; }, 2000);
-  }
+function doSave() {
+  localStorage.setItem('eeluimagery-settings', JSON.stringify(getState()));
+  document.getElementById('save-status').textContent = '已儲存 ✓';
+  setTimeout(() => { const el = document.getElementById('save-status'); if (el && el.textContent === '已儲存 ✓') el.textContent = ''; }, 2000);
 }
 
 const TRIGGERS = ['簽約後','前期完成','拍攝完成','粗剪完成','初剪交付','終剪核准','驗收通過','尾款結清'];
@@ -805,10 +753,7 @@ function recalc() {
   scheduleSave();
 }
 
-applyCommercialPreset();
-applyTenderPreset();
-renderMemberRoles();
-recalc();
+loadSettings();
 </script>
 </body>
 </html>
