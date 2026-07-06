@@ -303,21 +303,21 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
     <div class="range-row">
       <label>拍攝 <span id="pct-shoot-lbl">15</span>% → <span id="pct-shoot-amt" style="color:var(--text-secondary);"></span></label>
       <div class="range-inner">
-        <input type="range" id="pct-shoot" min="0" max="40" value="12" step="1" oninput="syncBudget()" />
+        <input type="range" id="pct-shoot" min="0" max="40" value="15" step="1" oninput="syncBudget()" />
         <span id="pct-shoot-out" style="font-size:13px;font-weight:500;min-width:36px;text-align:right;"></span>
       </div>
     </div>
     <div class="range-row">
       <label>後期 <span id="pct-post-lbl">10</span>% → <span id="pct-post-amt" style="color:var(--text-secondary);"></span></label>
       <div class="range-inner">
-        <input type="range" id="pct-post" min="0" max="30" value="9" step="1" oninput="syncBudget()" />
+        <input type="range" id="pct-post" min="0" max="30" value="10" step="1" oninput="syncBudget()" />
         <span id="pct-post-out" style="font-size:13px;font-weight:500;min-width:36px;text-align:right;"></span>
       </div>
     </div>
     <div class="range-row">
       <label>雜支 <span id="pct-misc-lbl">7</span>% → <span id="pct-misc-amt" style="color:var(--text-secondary);"></span></label>
       <div class="range-inner">
-        <input type="range" id="pct-misc" min="0" max="20" value="6" step="1" oninput="syncBudget()" />
+        <input type="range" id="pct-misc" min="0" max="20" value="7" step="1" oninput="syncBudget()" />
         <span id="pct-misc-out" style="font-size:13px;font-weight:500;min-width:36px;text-align:right;"></span>
       </div>
     </div>
@@ -425,7 +425,11 @@ function setState(d) {
   set('pct-admin', d.pctAdmin);
   set('pct-office', d.pctOffice);
   set('reserveUsed', d.reserveUsed);
-  if (d.phases) phases = d.phases;
+  if (d.phases) {
+    phases = d.phases;
+    syncPresetSelect('commercial');
+    syncPresetSelect('tender');
+  }
   if (d.memberRoles) d.memberRoles.forEach(mr => {
     const m = MEMBERS.find(x => x.id === mr.id);
     if (m) m.roles = mr.roles || [];
@@ -589,15 +593,36 @@ function syncBudget() {
 }
 
 function resetProd() {
-  document.getElementById('pct-shoot').value=12;
-  document.getElementById('pct-post').value=9;
-  document.getElementById('pct-misc').value=6;
+  document.getElementById('pct-shoot').value=15;
+  document.getElementById('pct-post').value=10;
+  document.getElementById('pct-misc').value=7;
   syncBudget();
 }
 function resetOps() {
   document.getElementById('pct-admin').value=5;
   document.getElementById('pct-office').value=10;
   syncBudget();
+}
+
+const COMMERCIAL_PRESETS = {
+  '3-3-4': [{label:'簽約',pct:30,trigger:'簽約後'},{label:'中期',pct:30,trigger:'前期完成'},{label:'尾款',pct:40,trigger:'驗收通過'}],
+  '5-1-4': [{label:'簽約',pct:50,trigger:'簽約後'},{label:'中期',pct:10,trigger:'拍攝完成'},{label:'尾款',pct:40,trigger:'驗收通過'}],
+  '4-3-2-1': [{label:'簽約',pct:40,trigger:'簽約後'},{label:'前期',pct:30,trigger:'前期完成'},{label:'剪輯',pct:20,trigger:'粗剪完成'},{label:'尾款',pct:10,trigger:'驗收通過'}],
+};
+const TENDER_PRESETS = {
+  '3-7': [{label:'預付',pct:30,trigger:'簽約後'},{label:'驗收',pct:70,trigger:'驗收通過'}],
+  '3-3-4': [{label:'第一期',pct:30,trigger:'簽約後'},{label:'第二期',pct:30,trigger:'拍攝完成'},{label:'驗收',pct:40,trigger:'驗收通過'}],
+  '1-3-3-3': [{label:'預付',pct:10,trigger:'簽約後'},{label:'一期',pct:30,trigger:'前期完成'},{label:'二期',pct:30,trigger:'拍攝完成'},{label:'驗收',pct:30,trigger:'驗收通過'}],
+};
+
+function syncPresetSelect(type) {
+  const presets = type === 'commercial' ? COMMERCIAL_PRESETS : TENDER_PRESETS;
+  const current = JSON.stringify(phases[type].map(p => ({ pct: p.pct, trigger: p.trigger })));
+  const match = Object.keys(presets).find(k => {
+    return JSON.stringify(presets[k].map(p => ({ pct: p.pct, trigger: p.trigger }))) === current;
+  });
+  const sel = document.getElementById(type === 'commercial' ? 'commercialPreset' : 'tenderPreset');
+  if (sel) sel.value = match || 'custom';
 }
 
 function applyCommercialPreset() {
