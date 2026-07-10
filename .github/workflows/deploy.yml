@@ -26,9 +26,10 @@ jobs:
       - name: Inject Supabase credentials
         run: |
           cat > config.js << 'EOF'
-          const SUPABASE_URL = 'https://REDACTED_PROJECT.supabase.co';
+          const SUPABASE_URL = '${{ secrets.SUPABASE_URL }}';
+          const SUPABASE_KEY = '${{ secrets.SUPABASE_KEY }}';
           EOF
-          echo "const SUPABASE_KEY = '${{ secrets.SUPABASE_KEY }}';" >> config.js
+          echo "✓ config.js generated from GitHub Secrets"
 
       - uses: actions/configure-pages@v4
 
