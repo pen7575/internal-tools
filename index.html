@@ -529,8 +529,8 @@ async function loadSettings() {
       applyTenderPreset();
     } else if (data?.data) {
       console.log('Loaded settings:', data.data);
-      // Load all settings except projectValue
-      const savedData = { ...data.data, projectValue: undefined };
+      // Load all settings except projectValue and memberRoles
+      const savedData = { ...data.data, projectValue: undefined, memberRoles: undefined };
       setState(savedData);
     } else {
       console.log('No saved settings found, using defaults');
@@ -557,8 +557,9 @@ function scheduleSave() {
 
 async function doSave() {
   const state = getState();
-  // Don't save projectValue, it should always reset to 0 on load
+  // Don't save projectValue and memberRoles, they should always reset on load
   delete state.projectValue;
+  delete state.memberRoles;
   const { error } = await sb.from('settings').upsert({ id: 1, data: state, updated_at: new Date().toISOString() });
   if (!error) {
     document.getElementById('save-status').textContent = '已儲存 ✓';
