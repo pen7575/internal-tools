@@ -367,9 +367,15 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
 </div>
 
 <script>
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let sb;
 let saveTimer = null;
 let isReady = false;
+
+if (typeof supabase !== 'undefined') {
+  sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+} else {
+  console.error('Supabase SDK not loaded');
+}
 
 async function signIn() {
   const email = document.getElementById('login-email').value.trim();
