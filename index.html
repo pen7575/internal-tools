@@ -15,14 +15,8 @@ if ('serviceWorker' in navigator) {
 const SUPABASE_URL = 'https://fhgyogptgfjoxxkqhlvp.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_n2udE9rCHprVyPk6ho0DyA_bQX8BvZI';
 let sb = null;
-
-function initializeSupabase() {
-  if (window.supabase && !sb) {
-    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  }
-}
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onload="initializeSupabase()"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -379,6 +373,13 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
 let saveTimer = null;
 let isReady = false;
 
+// Initialize Supabase after SDK is loaded
+if (typeof supabase !== 'undefined' && SUPABASE_URL && SUPABASE_KEY) {
+  sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+} else {
+  console.error('Failed to initialize Supabase', { supabase: typeof supabase, url: !!SUPABASE_URL, key: !!SUPABASE_KEY });
+}
+
 function checkStatus() {
   const statusEl = document.getElementById('status-check');
   if (!statusEl) return;
@@ -392,6 +393,7 @@ function checkStatus() {
   statusEl.textContent = checks.join(' | ');
 }
 
+checkStatus();
 setInterval(checkStatus, 1000);
 
 async function signIn() {
