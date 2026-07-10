@@ -371,11 +371,14 @@ let sb;
 let saveTimer = null;
 let isReady = false;
 
-if (typeof supabase !== 'undefined') {
+function initSupabase() {
+  if (typeof supabase === 'undefined') {
+    setTimeout(initSupabase, 100);
+    return;
+  }
   sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-} else {
-  console.error('Supabase SDK not loaded');
 }
+initSupabase();
 
 async function signIn() {
   const email = document.getElementById('login-email').value.trim();
