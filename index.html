@@ -388,7 +388,8 @@ window.addEventListener('load', function() {
             document.getElementById('auth-overlay').style.display = 'none';
             document.getElementById('main-app').style.display = '';
             document.getElementById('user-info').textContent = session.user.email;
-            loadSettings();
+            if (sb) loadSettings();
+            else setTimeout(() => loadSettings(), 500);
           } else {
             document.getElementById('auth-overlay').style.display = '';
             document.getElementById('main-app').style.display = 'none';
