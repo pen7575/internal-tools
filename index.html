@@ -518,6 +518,9 @@ async function loadSettings() {
       return;
     }
 
+    // Always reset projectValue to 0 first
+    document.getElementById('projectValue').value = '0';
+
     const { data, error } = await sb.from('settings').select('data').eq('id', 1).single();
 
     if (error) {
@@ -526,7 +529,9 @@ async function loadSettings() {
       applyTenderPreset();
     } else if (data?.data) {
       console.log('Loaded settings:', data.data);
-      setState(data.data);
+      // Load all settings except projectValue
+      const savedData = { ...data.data, projectValue: undefined };
+      setState(savedData);
     } else {
       console.log('No saved settings found, using defaults');
       applyCommercialPreset();
@@ -539,8 +544,6 @@ async function loadSettings() {
   }
 
   renderMemberRoles();
-  // Always reset projectValue to 0
-  document.getElementById('projectValue').value = '0';
   recalc();
   isReady = true;
 }
