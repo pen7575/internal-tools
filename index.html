@@ -428,16 +428,27 @@ async function signIn() {
 
   btn.textContent = '登入中…';
   btn.disabled = true;
+  errorEl.textContent = '';
 
   try {
+    console.log('Attempting login with:', email);
     const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+    console.log('Login response:', { data, error });
+
     if (error) {
-      errorEl.textContent = error.message || '登入失敗，請檢查帳號和密碼';
+      errorEl.textContent = '登入失敗：' + (error.message || error);
+      console.error('Auth error:', error);
     } else if (data?.session) {
+      console.log('Login successful, session:', data.session.user.email);
       errorEl.textContent = '';
+    } else {
+      errorEl.textContent = '登入失敗：未取得 session';
+      console.log('No session returned:', data);
     }
   } catch (err) {
-    errorEl.textContent = '網路錯誤或服務暫時無法使用：' + (err.message || err);
+    errorEl.textContent = '錯誤：' + (err.message || JSON.stringify(err));
+    console.error('Exception:', err);
   } finally {
     btn.textContent = '登入';
     btn.disabled = false;
