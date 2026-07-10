@@ -373,42 +373,20 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
 let saveTimer = null;
 let isReady = false;
 
-document.addEventListener('DOMContentLoaded', function() {
-  if (typeof window.supabase === 'undefined') {
-    console.error('Supabase SDK not loaded');
-    document.getElementById('status-check').textContent = '錯誤：Supabase SDK 未載入';
-    return;
-  }
-
-  try {
-    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    if (document.getElementById('status-check')) {
-      document.getElementById('status-check').textContent = 'Supabase 已連接 ✓';
-    }
-  } catch (err) {
-    console.error('Failed to create Supabase client:', err);
-    if (document.getElementById('status-check')) {
-      document.getElementById('status-check').textContent = '錯誤：' + err.message;
+// Initialize Supabase when SDK loads
+window.addEventListener('load', function() {
+  if (window.supabase && SUPABASE_URL && SUPABASE_KEY && !sb) {
+    try {
+      sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      const statusEl = document.getElementById('status-check');
+      if (statusEl) statusEl.textContent = '✓ 已連接';
+    } catch (err) {
+      console.error('Supabase init error:', err);
+      const statusEl = document.getElementById('status-check');
+      if (statusEl) statusEl.textContent = '✗ ' + err.message;
     }
   }
 });
-
-function checkStatus() {
-  const statusEl = document.getElementById('status-check');
-  if (!statusEl) return;
-
-  const checks = [];
-  checks.push('URL: ' + (SUPABASE_URL ? '✓' : '✗') + ' ' + (SUPABASE_URL ? SUPABASE_URL.substring(8, 20) + '...' : ''));
-  checks.push('Key: ' + (SUPABASE_KEY ? '✓' : '✗') + ' ' + (SUPABASE_KEY ? SUPABASE_KEY.substring(0, 15) + '...' : ''));
-  checks.push('SDK: ' + (typeof window.supabase !== 'undefined' ? '✓' : '✗'));
-  checks.push('Client: ' + (sb ? '✓ (sb 已初始化)' : '✗ (未初始化)'));
-  checks.push('signIn: ' + (typeof signIn !== 'undefined' ? '✓ (函数已定義)' : '✗ (未定義)'));
-
-  statusEl.textContent = checks.join('\n');
-}
-
-checkStatus();
-setInterval(checkStatus, 1000);
 
 async function signIn() {
   const email = document.getElementById('login-email').value.trim();
