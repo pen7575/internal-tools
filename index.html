@@ -125,7 +125,6 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
     </div>
     <div style="text-align:right;flex-shrink:0;">
       <div id="user-info" style="font-size:12px;color:var(--text-tertiary);margin-bottom:4px;"></div>
-      <div id="save-status" style="font-size:11px;color:var(--text-tertiary);margin-bottom:6px;min-height:14px;"></div>
       <button onclick="signOut()" style="font-size:12px;color:var(--text-tertiary);">登出</button>
     </div>
   </div>
@@ -551,7 +550,6 @@ async function loadSettings() {
 function scheduleSave() {
   if (!isReady) return;
   clearTimeout(saveTimer);
-  document.getElementById('save-status').textContent = '未儲存…';
   saveTimer = setTimeout(doSave, 1500);
 }
 
@@ -561,10 +559,6 @@ async function doSave() {
   delete state.projectValue;
   delete state.memberRoles;
   const { error } = await sb.from('settings').upsert({ id: 1, data: state, updated_at: new Date().toISOString() });
-  if (!error) {
-    document.getElementById('save-status').textContent = '已儲存 ✓';
-    setTimeout(() => { const el = document.getElementById('save-status'); if (el && el.textContent === '已儲存 ✓') el.textContent = ''; }, 2000);
-  }
 }
 
 const TRIGGERS = ['簽約後','前期完成','拍攝完成','粗剪完成','初剪交付','終剪核准','驗收通過','尾款結清'];
