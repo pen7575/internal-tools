@@ -556,7 +556,10 @@ function scheduleSave() {
 }
 
 async function doSave() {
-  const { error } = await sb.from('settings').upsert({ id: 1, data: getState(), updated_at: new Date().toISOString() });
+  const state = getState();
+  // Don't save projectValue, it should always reset to 0 on load
+  delete state.projectValue;
+  const { error } = await sb.from('settings').upsert({ id: 1, data: state, updated_at: new Date().toISOString() });
   if (!error) {
     document.getElementById('save-status').textContent = '已儲存 ✓';
     setTimeout(() => { const el = document.getElementById('save-status'); if (el && el.textContent === '已儲存 ✓') el.textContent = ''; }, 2000);
