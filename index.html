@@ -107,7 +107,7 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
   <div id="login-box">
     <h2>一路拍影像有限公司</h2>
     <p class="sub">登入以使用專案試算</p>
-    <div id="status-check" style="font-size:12px;color:var(--text-tertiary);margin-bottom:12px;padding:8px;background:var(--bg-secondary);border-radius:4px;"></div>
+    <div id="status-check" style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px;padding:8px;background:var(--bg-secondary);border-radius:4px;line-height:1.4;font-family:monospace;"></div>
     <input type="email" id="login-email" placeholder="電子郵件" autocomplete="email" />
     <input type="password" id="login-password" placeholder="密碼" autocomplete="current-password" onkeydown="if(event.key==='Enter')signIn()" />
     <button id="login-btn" onclick="signIn()">登入</button>
@@ -398,12 +398,13 @@ function checkStatus() {
   if (!statusEl) return;
 
   const checks = [];
-  checks.push('URL: ' + (SUPABASE_URL ? '✓' : '✗'));
-  checks.push('Key: ' + (SUPABASE_KEY ? '✓' : '✗'));
-  checks.push('SDK: ' + (typeof supabase !== 'undefined' ? '✓' : '✗'));
-  checks.push('Client: ' + (sb ? '✓' : '✗'));
+  checks.push('URL: ' + (SUPABASE_URL ? '✓' : '✗') + ' ' + (SUPABASE_URL ? SUPABASE_URL.substring(8, 20) + '...' : ''));
+  checks.push('Key: ' + (SUPABASE_KEY ? '✓' : '✗') + ' ' + (SUPABASE_KEY ? SUPABASE_KEY.substring(0, 15) + '...' : ''));
+  checks.push('SDK: ' + (typeof window.supabase !== 'undefined' ? '✓' : '✗'));
+  checks.push('Client: ' + (sb ? '✓ (sb 已初始化)' : '✗ (未初始化)'));
+  checks.push('signIn: ' + (typeof signIn !== 'undefined' ? '✓ (函数已定義)' : '✗ (未定義)'));
 
-  statusEl.textContent = checks.join(' | ');
+  statusEl.textContent = checks.join('\n');
 }
 
 checkStatus();
