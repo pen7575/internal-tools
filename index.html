@@ -380,6 +380,22 @@ window.addEventListener('load', function() {
       sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       const statusEl = document.getElementById('status-check');
       if (statusEl) statusEl.textContent = '✓ 已連接';
+
+      // Setup auth listener after client is created
+      if (sb && sb.auth) {
+        sb.auth.onAuthStateChange((event, session) => {
+          if (session) {
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('main-app').style.display = '';
+            document.getElementById('user-info').textContent = session.user.email;
+            loadSettings();
+          } else {
+            document.getElementById('auth-overlay').style.display = '';
+            document.getElementById('main-app').style.display = 'none';
+            isReady = false;
+          }
+        });
+      }
     } catch (err) {
       console.error('Supabase init error:', err);
       const statusEl = document.getElementById('status-check');
@@ -430,21 +446,10 @@ async function signIn() {
 
 async function signOut() {
   isReady = false;
-  await sb.auth.signOut();
-}
-
-sb.auth.onAuthStateChange((event, session) => {
-  if (session) {
-    document.getElementById('auth-overlay').style.display = 'none';
-    document.getElementById('main-app').style.display = '';
-    document.getElementById('user-info').textContent = session.user.email;
-    loadSettings();
-  } else {
-    document.getElementById('auth-overlay').style.display = '';
-    document.getElementById('main-app').style.display = 'none';
-    isReady = false;
+  if (sb && sb.auth) {
+    await sb.auth.signOut();
   }
-});
+}
 
 function getState() {
   return {
