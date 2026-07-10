@@ -372,13 +372,27 @@ footer { font-size:11px; color:var(--text-tertiary); border-top:0.5px solid var(
 <script>
 let saveTimer = null;
 let isReady = false;
+let sb = null;
 
-// Initialize Supabase after SDK is loaded
-if (typeof supabase !== 'undefined' && SUPABASE_URL && SUPABASE_KEY) {
-  sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-} else {
-  console.error('Failed to initialize Supabase', { supabase: typeof supabase, url: !!SUPABASE_URL, key: !!SUPABASE_KEY });
-}
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof window.supabase === 'undefined') {
+    console.error('Supabase SDK not loaded');
+    document.getElementById('status-check').textContent = '錯誤：Supabase SDK 未載入';
+    return;
+  }
+
+  try {
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    if (document.getElementById('status-check')) {
+      document.getElementById('status-check').textContent = 'Supabase 已連接 ✓';
+    }
+  } catch (err) {
+    console.error('Failed to create Supabase client:', err);
+    if (document.getElementById('status-check')) {
+      document.getElementById('status-check').textContent = '錯誤：' + err.message;
+    }
+  }
+});
 
 function checkStatus() {
   const statusEl = document.getElementById('status-check');
