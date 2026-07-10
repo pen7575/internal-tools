@@ -17,11 +17,11 @@ jobs:
           const SUPABASE_URL = '${{ secrets.SUPABASE_URL }}';
           const SUPABASE_KEY = '${{ secrets.SUPABASE_KEY }}';
           EOF
-          echo "✓ config.js generated"
 
-      - name: Upload to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
-          cname: pen7575.github.io/internal-tools
+      - name: Commit config.js
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add config.js
+          git diff --cached --quiet || git commit -m "chore: update config.js from secrets [skip ci]"
+          git push || true
